@@ -8,7 +8,7 @@ jobs:
   - job: dockerbuild
     displayName: "build docker image"
     pool:
-      name: "(pool_name)"
+      name: "$(pool_name)"
     workspace:
       clean: true
     steps:
@@ -37,7 +37,7 @@ jobs:
       dependsOn: dockerbuild
       displayName: "build docker image and upload"
       pool:
-        name: "(pool_name)"
+        name: "$(pool_name)"
       workspace:
         clean: true
       steps:
