@@ -5,9 +5,9 @@ trigger:
 
 variables:
   - group: default_credentails
-  - template: /templates/vars/vars.yml
+  - template: templates/vars/vars.yml
 
 stages:
-  - template: tempaltes/stages/build_stage.yml
+  - template: templates/stages/build_stage.yml
     parameters:
       pipeline_type: develop
