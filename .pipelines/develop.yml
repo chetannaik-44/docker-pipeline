@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      develop
+      - develop
 
 variables:
   - group: default_credentails
@@ -10,4 +10,4 @@ variables:
 stages:
   - template: tempaltes/stages/build_stage.yml
     parameters:
-      pipeline_type: ${{ parameters.pipeline_type }}
+      pipeline_type: develop
