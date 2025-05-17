@@ -8,6 +8,6 @@ stages:
   - stage: build
     displayName: "build stage"
     jobs:
-      - template: ../jobs/build_image.yml
+      - template: ../jobs/docker_build.yml
         parameters:
           pipeline_type: ${{ parameters. pipeline_type }}
