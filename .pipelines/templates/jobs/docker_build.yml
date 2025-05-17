@@ -1,0 +1,71 @@
+parameters:
+  - name: pipeline_type
+    type: string
+    values: 
+      - develop
+      - pr
+jobs:
+  - job: dockerbuild
+    displayName: "build docker image"
+    pool:
+      name: "(pool_name)"
+    workspace:
+      clean: true
+    steps:
+      - script: |
+          set -exo pipefail
+          echo "docker login"
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        displayName: 'Docker Login'
+        env:
+          DOCKER_USERNAME: $(docker_user)
+          DOCKER_PASSWORD: $(docker_pasword)
+
+      - script: |
+          echo "##vso[task.setvariable variable=timestamp]$(date +%Y%m%d%H%M)"
+        displayName: 'Generate timestamp'
+
+      - script: |
+          set -exo pipefail
+          echo "docker build"
+          cd $(Build.Repository.LocalPath)/.pipelines/script/docker
+          docker build -t $(dockerImageName):$(timestamp) .
+        displayName: 'Docker Build'
+
+  - ${{ if eq(parameters.pipeline_type,'develop') }}:
+    - job: dockerupload
+      dependsOn: dockerbuild
+      displayName: "build docker image and upload"
+      pool:
+        name: "(pool_name)"
+      workspace:
+        clean: true
+      steps:
+        - script: |
+            set -exo pipefail
+            echo "docker login"
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          displayName: 'Docker Login'
+          env:
+            DOCKER_USERNAME: $(docker_user)
+            DOCKER_PASSWORD: $(docker_pasword)
+
+        - script: |
+            echo "##vso[task.setvariable variable=timestamp]$(date +%Y%m%d%H%M)"
+          displayName: 'Generate timestamp'
+        
+        - script: |
+            set -exo pipefail
+            echo "docker build"
+            cd $(Build.Repository.LocalPath)/.pipelines/script/docker
+            docker build -t $(dockerImageName):$(timestamp) .
+          displayName: 'Docker Build'
+
+        - script: |
+            set -exo pipefail
+            echo "docker image upload"
+            docker push $(dockerImageName):$(timestamp)
+          displayName: 'Docker Push'
+          env:
+            DOCKER_USERNAME: $(docker_user)
+            DOCKER_PASSWORD: $(docker_pasword)

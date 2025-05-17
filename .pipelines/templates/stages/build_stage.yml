@@ -1,0 +1,13 @@
+parameters:
+  - name: pipeline_type
+    type: string
+    values: 
+      - develop
+      - pr
+stages:
+  - stage: build
+    displayName: "build stage"
+    jobs:
+      - template: ../jobs/build_image.yml
+        parameters:
+          pipeline_type: ${{ parameters. pipeline_type }}

@@ -1,0 +1,5 @@
+variables:
+  - name: dockerImageName
+    value: 'chetannaik44/conan'
+  - name: pool_name
+    value: 'dev'

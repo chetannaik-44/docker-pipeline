@@ -1,0 +1,13 @@
+trigger:
+  branches:
+    include:
+      develop
+
+variables:
+  - group: default_credentails
+  - template: /templates/vars/vars.yml
+
+stages:
+  - template: tempaltes/stages/build_stage.yml
+    parameters:
+      pipeline_type: ${{ parameters.pipeline_type }}

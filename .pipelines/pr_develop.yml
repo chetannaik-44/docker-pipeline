@@ -1,0 +1,21 @@
+parameters:
+  - name: pipeline_type
+    type: string
+    values: 
+      - develop
+      - pr
+  
+trigger: none
+pr:
+  branches:
+    include:
+     - develop
+
+variables:
+  - group: default_credentails
+  - template: /templates/vars/vars.yml
+
+stages:
+  - template: tempaltes/stages/build_stage.yml
+    parameters:
+      pipeline_type: ${{ parameters.pipeline_type }}
