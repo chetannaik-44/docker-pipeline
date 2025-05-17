@@ -28,7 +28,7 @@ jobs:
       - script: |
           set -exo pipefail
           echo "docker build"
-          cd $(Build.Repository.LocalPath)/.pipelines/script/docker
+          cd $(Build.Repository.LocalPath)
           docker build -t $(dockerImageName):$(timestamp) .
         displayName: 'Docker Build'
 
@@ -57,7 +57,7 @@ jobs:
         - script: |
             set -exo pipefail
             echo "docker build"
-            cd $(Build.Repository.LocalPath)/.pipelines/script/docker
+            cd $(Build.Repository.LocalPath)
             docker build -t $(dockerImageName):$(timestamp) .
           displayName: 'Docker Build'
 
